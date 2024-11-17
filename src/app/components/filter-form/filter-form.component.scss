@@ -1,0 +1,10 @@
+
+
+
+p-calendar, .p-calendar {
+  @apply block w-full;
+}
+
+.p-inputtext {
+  @apply px-2 transition-none h-full w-full bg-transparent shadow-none focus:outline-none focus-visible:outline-none;
+}

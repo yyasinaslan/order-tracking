@@ -1,0 +1,17 @@
+:host {
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: var(--value);
+    z-index: 0;
+
+    @apply bg-green-200;
+  }
+}
+
+.content {
+  z-index: 1;
+}

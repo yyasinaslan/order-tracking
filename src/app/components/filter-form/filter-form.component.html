@@ -1,0 +1,106 @@
+<form [formGroup]="filterForm" (ngSubmit)="applyFilter()"
+      class="grid grid-cols-1 md:grid-cols-4 gap-3 px-3 py-3 border-b">
+
+  <!-- Tracking no filter -->
+  <div>
+    <label for="orderTrackingNo" class="text-sm ">Gönderi Takip Numarası</label>
+    <div class="flex gap-1 bg-slate-100 rounded-lg focus-within:ring-2 focus-within:ring-slate-500">
+      <label for="orderTrackingNo" class="p-3 pe-0 text-muted">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 16 16">
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
+      </label>
+      <input type="text" formControlName="shipmentTrackingNo" id="orderTrackingNo"
+             class="rounded-lg px-2 flex-auto bg-transparent focus:outline-none">
+    </div>
+  </div>
+
+  <!-- order no filter -->
+  <div>
+    <label for="orderNo" class="text-sm ">Sipariş Numarası</label>
+    <div class="flex gap-1 bg-slate-100 rounded-lg focus-within:ring-2 focus-within:ring-slate-500">
+      <label for="orderNo" class="p-3 pe-0 text-muted">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 16 16">
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
+      </label>
+      <input type="text" formControlName="orderNo" id="orderNo"
+             class="rounded-lg px-2 flex-auto bg-transparent focus:outline-none">
+    </div>
+  </div>
+
+  <!-- License plate filter -->
+  <div>
+    <label for="licensePlate" class="text-sm ">Plaka</label>
+    <div class="flex gap-1 bg-slate-100 rounded-lg focus-within:ring-2 focus-within:ring-slate-500">
+      <label for="licensePlate" class="p-3 pe-0 text-muted">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 16 16">
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
+      </label>
+      <input type="text" formControlName="plate" id="licensePlate"
+             class="rounded-lg px-2 flex-auto bg-transparent focus:outline-none">
+    </div>
+  </div>
+
+  <!-- Date range filter -->
+  <div>
+    <label for="dateRange" class="text-sm ">Tarih Aralığı</label>
+    <div class="flex gap-1 items-center bg-slate-100 rounded-lg focus-within:ring-2 focus-within:ring-slate-500">
+      <p-calendar
+        id="dateRange"
+        formControlName="dateRange"
+        selectionMode="range"
+        [readonlyInput]="true"/>
+      <label for="dateRange" class="block p-3 ps-0 text-muted">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 16 16">
+          <path
+            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+        </svg>
+      </label>
+    </div>
+  </div>
+
+  <!-- State filter -->
+  <div>
+    <label for="state" class="text-sm ">Durum</label>
+    <div class="flex gap-1 bg-slate-100 rounded-lg focus-within:ring-2 focus-within:ring-slate-500">
+      <select type="text" formControlName="state" id="state" [compareWith]="compareState"
+              class="rounded-lg px-2 py-2 flex-auto bg-transparent focus:outline-none">
+        <option value="">---</option>
+        @for (state of orderStates; track state.value) {
+          <option [ngValue]="state.value">{{ state.label }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Delivery State filter -->
+  <div>
+    <label for="deliveryState" class="text-sm ">Dağıtım Durumu</label>
+    <div class="flex gap-1 bg-slate-100 rounded-lg focus-within:ring-2 focus-within:ring-slate-500">
+      <select type="text" formControlName="deliveryState" id="deliveryState"
+              class="rounded-lg px-2 py-2 flex-auto bg-transparent focus:outline-none">
+        <option value="">---</option>
+        @for (state of deliveryStates; track state.value) {
+          <option [ngValue]="state.value">{{ state.label }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="-col-start-2 -col-end-1 place-self-end flex gap-3">
+    <button type="submit"
+            class="bg-slate-800 text-white rounded-lg h-10 px-4 hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-slate-800 focus-visible:outline-offset-2">
+      Filtrele
+    </button>
+    <button type="button" (click)="clearFilter()"
+            class="bg-slate-300 text-slate-950 rounded-lg h-10 px-4 hover:bg-slate-700 hover:text-white focus-visible:outline-2 focus-visible:outline-slate-800 focus-visible:outline-offset-2">
+      Temizle
+    </button>
+  </div>
+
+</form>

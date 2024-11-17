@@ -1,0 +1,45 @@
+@import "mixins";
+
+$menu-size: 50px;
+
+:host {
+
+  @include screen-mobile {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr $menu-size;
+  }
+
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right:auto;
+  width: $menu-size;
+  background: white;
+
+  @apply border-e border-e-border;
+
+  @include screen-mobile {
+    width: 100%;
+    height: $menu-size;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    @apply border-e-0 border-t border-t-border;
+  }
+}
+
+main {
+  margin-inline-start: $menu-size;
+  margin-block-end: 0;
+
+  @include screen-mobile {
+    margin-inline-start: 0;
+    margin-block-end: $menu-size;
+  }
+}

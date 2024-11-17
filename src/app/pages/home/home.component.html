@@ -1,0 +1,82 @@
+<!-- Date selector -->
+<div class="py-3 mt-5 mb-3">
+  <button type="button" class="flex text-sm gap-1 items-center">
+    <span>Bugün</span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon text-muted" viewBox="0 0 16 16">
+      <path fill-rule="evenodd"
+            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+    </svg>
+  </button>
+</div>
+
+@if (summaryData | async; as summary) {
+  <!-- Summary cards -->
+  <div class="grid gap-2 md:gap-5 grid-cols-2 md:grid-cols-5">
+    <app-dashboard-card title="Rotadaki Paket" [value]="summary.packetRoute"/>
+    <app-dashboard-card title="DM Paket Sayısı" [value]="summary.DMPackageCount" class="bg-slate-100"/>
+    <app-dashboard-card title="Dağıtıma Çıkan Paket" [value]="summary.packageReleased"/>
+    <app-dashboard-card title="Teslim Edildi" [value]="summary.delivered" class="bg-slate-100"/>
+    <app-dashboard-card title="Teslim Edilemedi" [value]="summary.notDelivered"/>
+  </div>
+
+  <app-progressbar class="mt-5 bg-slate-200 h-8 md:h-10"
+                   [value]="100 * summary.delivered / (summary.delivered + summary.notDelivered)">
+    <div class="font-semibold text-slate-700 text-sm md:text-base">TAMAMLANAN SİPARİŞ {{ summary.completedOrder }}</div>
+  </app-progressbar>
+}
+
+<!-- Filter Section -->
+<section class="mt-7">
+  <h1 class="text-xl font-semibold md:text-2xl text-slate-700 mb-5">Sipariş Kontrol Ekranı</h1>
+
+  <p-panel header="Filtreler" [toggleable]="true" [(collapsed)]="filtersCollapsed">
+    <app-filter-form (filterApplied)="changeFilters($event)"/>
+  </p-panel>
+</section>
+
+<!-- Data table section -->
+<section class="overflow-x-auto">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 bg-gray-50">
+    <tr>
+      <th scope="col" class="px-6 py-3">Sipariş No</th>
+      <th scope="col" class="px-6 py-3">Gönderi Takip No</th>
+      <th scope="col" class="px-6 py-3">Sipariş Takip No</th>
+      <th scope="col" class="px-6 py-3">Müşteri</th>
+      <th scope="col" class="px-6 py-3">İlçe</th>
+      <th scope="col" class="px-6 py-3">Plaka</th>
+      <th scope="col" class="px-6 py-3">Dağıtıma Çıkarıldı</th>
+      <th scope="col" class="px-6 py-3">Durum</th>
+      <th scope="col" class="px-6 py-3">Tarih</th>
+      <th scope="col" class="px-6 py-3">Sipariş Detay</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (row of tableData | async; track row.orderNo) {
+        <tr class="bg-white border-b">
+          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">{{ row.orderNo }}</td>
+          <td class="px-6 py-4">{{ row.shipmentTrackingNo }}</td>
+          <td class="px-6 py-4">{{ row.orderTrackingNo }}</td>
+          <td class="px-6 py-4">{{ row.customerName | maskedName }}</td>
+          <td class="px-6 py-4">{{ row.district }}</td>
+          <td class="px-6 py-4">{{ row.plate }}</td>
+          <td class="px-6 py-4">{{ row.releasedForDistribution }}</td>
+          <td class="px-6 py-4">{{ orderStateLabels[row.Statu] }}</td>
+          <td class="px-6 py-4">{{ row.Date | date:"dd.MM.yyyy" }}</td>
+          <td class="px-6 py-4">
+            <a [routerLink]="['/detail', row.orderNo]"
+               class="text-nowrap px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sipariş
+              Detay</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <p-paginator
+    (onPageChange)="onPageChange($event)"
+    [first]="1"
+    [rows]="limit()"
+    [totalRecords]="itemCount()"
+    [rowsPerPageOptions]="[10, 20, 30]"/>
+</section>

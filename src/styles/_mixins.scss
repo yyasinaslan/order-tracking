@@ -1,0 +1,13 @@
+$mobile-breakpoint: 768px;
+
+@mixin screen-mobile {
+  @media (max-width: $mobile-breakpoint) {
+    @content;
+  }
+}
+
+@mixin screen-large {
+  @media (min-width: $mobile-breakpoint) {
+    @content;
+  }
+}
